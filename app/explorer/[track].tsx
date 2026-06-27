@@ -56,6 +56,22 @@ export default function ExplorerScreen() {
   const filteredTags =
     category === 'All' ? explorer.tags : explorer.tags.filter((t) => t.category === category);
 
+  function challengeForTag(tag: TagInfo): SequencerChallenge {
+    const e = explorer!;
+    const key = tag.tag.toLowerCase().replace(/[<>\/\s]/g, '');
+    const byToken = e.challenges.find((ch) =>
+      ch.tokens.some((t) => {
+        const tl = t.toLowerCase();
+        return tl.includes(tag.tag.toLowerCase()) || (key.length > 1 && tl.includes(key));
+      })
+    );
+    if (byToken) return byToken;
+    return (
+      e.challenges.find((ch) => !progress.completedLessons.includes(ch.id)) ??
+      e.challenges[0]
+    );
+  }
+
   function openSequencer(ch: SequencerChallenge) {
     setChallenge(ch);
     setPlaced([]);
@@ -261,7 +277,7 @@ export default function ExplorerScreen() {
 
                   <Pressable
                     style={[styles.practiceBtn, { backgroundColor: explorer.color }]}
-                    onPress={() => openSequencer(explorer.challenges[0])}
+                    onPress={() => openSequencer(challengeForTag(tag))}
                   >
                     <Text style={styles.practiceBtnText}>Practice →</Text>
                   </Pressable>
