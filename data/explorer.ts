@@ -202,6 +202,113 @@ const delphiExplorer: TrackExplorer = {
   ],
 };
 
+const gitExplorer: TrackExplorer = {
+  trackId: 'git',
+  trackName: 'Git',
+  icon: '🌿',
+  color: '#F05032',
+  categories: ['All', 'Setup', 'Staging', 'Commits', 'Branches', 'Undoing'],
+  tags: [
+    { tag: 'git init', label: 'Init', category: 'Setup', description: 'Turns the current folder into a Git repository. Creates a hidden .git folder to store all history.', example: 'mkdir my-project\ncd my-project\ngit init' },
+    { tag: 'git status', label: 'Status', category: 'Setup', description: 'Shows what files are staged, modified, or untracked. Run this before every commit.', example: 'git status' },
+    { tag: 'git log', label: 'Log', category: 'Setup', description: 'Shows the full commit history. Use --oneline for a compact view.', example: 'git log\ngit log --oneline' },
+    { tag: 'git add', label: 'Add', category: 'Staging', description: 'Moves changes to the staging area — ready to be committed. Use . to stage everything.', example: 'git add index.html\ngit add .' },
+    { tag: 'git commit', label: 'Commit', category: 'Commits', description: 'Saves a snapshot of your staged changes. Always include a clear -m message.', example: 'git commit -m "Add homepage layout"' },
+    { tag: 'git diff', label: 'Diff', category: 'Commits', description: 'Shows exactly what changed line-by-line since the last commit.', example: 'git diff\ngit diff --staged' },
+    { tag: 'git branch', label: 'Branch', category: 'Branches', description: 'Lists, creates, or deletes branches. Use -b with checkout to create and switch in one step.', example: 'git branch\ngit branch new-feature\ngit branch -d old-branch' },
+    { tag: 'git checkout', label: 'Checkout', category: 'Branches', description: 'Switches to a different branch. Use -b to create and switch at the same time.', example: 'git checkout main\ngit checkout -b feature-login' },
+    { tag: 'git merge', label: 'Merge', category: 'Branches', description: 'Combines another branch into the current one. Switch to the destination branch first.', example: 'git checkout main\ngit merge feature-login' },
+    { tag: 'git restore', label: 'Restore', category: 'Undoing', description: 'Discards changes in your working directory. Add --staged to unstage without losing edits.', example: 'git restore app.js\ngit restore --staged app.js' },
+    { tag: 'git stash', label: 'Stash', category: 'Undoing', description: 'Shelves uncommitted changes so you can switch context. Use pop to bring them back.', example: 'git stash\ngit stash pop\ngit stash list' },
+  ],
+  challenges: [
+    { id: 'git-seq-1', goal: 'Initialise a repo and check its status', tokens: ['git init', 'git status'], distractors: ['git start', 'git new'], xp: 25 },
+    { id: 'git-seq-2', goal: 'Stage all files and commit with a message', tokens: ['git add .', 'git commit -m "Initial commit"'], distractors: ['git save .', 'git push "Initial commit"'], xp: 35 },
+    { id: 'git-seq-3', goal: 'Create a new branch and switch to it', tokens: ['git checkout -b feature-nav'], distractors: ['git branch -switch feature-nav', 'git new branch feature-nav'], xp: 30 },
+    { id: 'git-seq-4', goal: 'Merge a feature branch back into main', tokens: ['git checkout main', 'git merge feature-nav'], distractors: ['git merge main feature-nav', 'git push main'], xp: 40 },
+    { id: 'git-seq-5', goal: 'Stash your work and then restore it', tokens: ['git stash', 'git stash pop'], distractors: ['git stash save', 'git stash restore'], xp: 30 },
+  ],
+};
+
+const githubExplorer: TrackExplorer = {
+  trackId: 'github',
+  trackName: 'GitHub',
+  icon: '🐙',
+  color: '#6e40c9',
+  categories: ['All', 'Remotes', 'Collaboration', 'Automation', 'Security'],
+  tags: [
+    { tag: 'git remote add', label: 'Add Remote', category: 'Remotes', description: 'Links your local repo to a remote repo on GitHub. The remote is usually named "origin".', example: 'git remote add origin https://github.com/you/repo.git' },
+    { tag: 'git push', label: 'Push', category: 'Remotes', description: 'Sends your local commits to the remote. Use -u on the first push to set the upstream.', example: 'git push -u origin main\ngit push' },
+    { tag: 'git pull', label: 'Pull', category: 'Remotes', description: 'Downloads the latest changes from the remote and merges them into your current branch.', example: 'git pull\ngit pull origin main' },
+    { tag: 'git clone', label: 'Clone', category: 'Remotes', description: 'Downloads a full copy of a remote repository — all files, history, and branches.', example: 'git clone https://github.com/owner/repo.git' },
+    { tag: 'Pull Request', label: 'Pull Request', category: 'Collaboration', description: 'A proposal to merge your branch into another. Teammates review and approve before merging.', example: '# Push your branch first:\ngit push origin my-feature\n# Then open a PR on github.com' },
+    { tag: 'Fork', label: 'Fork', category: 'Collaboration', description: "Your personal copy of someone else's repo. Fork on GitHub, clone locally, then open a PR to contribute back.", example: '# After forking on GitHub:\ngit clone https://github.com/YOU/forked-repo.git' },
+    { tag: 'Issues', label: 'Issues', category: 'Collaboration', description: 'Track bugs, features, and tasks. Reference them in commits with "closes #42" to auto-close on merge.', example: 'git commit -m "Fix nav bug — closes #12"' },
+    { tag: 'GitHub Actions', label: 'Actions', category: 'Automation', description: 'Automates CI/CD with YAML workflows in .github/workflows/. Triggers on push, PR, or schedule.', example: 'name: Tests\non: [push]\njobs:\n  test:\n    runs-on: ubuntu-latest\n    steps:\n      - uses: actions/checkout@v4\n      - run: npm test' },
+    { tag: '.gitignore', label: '.gitignore', category: 'Security', description: 'Lists files Git should never track. Always ignore node_modules/, .env, and build output.', example: '# .gitignore\nnode_modules/\n.env\ndist/' },
+    { tag: 'Branch Protection', label: 'Branch Protection', category: 'Security', description: 'Rules that prevent direct pushes to main and require PR reviews before merging.', example: '# Set under: Settings → Branches\n# → Branch protection rules' },
+  ],
+  challenges: [
+    { id: 'gh-seq-1', goal: 'Add a remote and push to it for the first time', tokens: ['git remote add origin https://github.com/you/repo.git', 'git push -u origin main'], distractors: ['git upload origin main', 'git add remote'], xp: 35 },
+    { id: 'gh-seq-2', goal: 'Clone a repo and check its status', tokens: ['git clone https://github.com/owner/repo.git', 'git status'], distractors: ['git download repo.git', 'git copy'], xp: 30 },
+    { id: 'gh-seq-3', goal: 'Push a feature branch to open a PR', tokens: ['git checkout -b add-search', 'git add .', 'git commit -m "Add search bar"', 'git push origin add-search'], distractors: ['git push origin main', 'git merge add-search'], xp: 50 },
+    { id: 'gh-seq-4', goal: 'Write a commit message that closes an issue', tokens: ['git commit -m "Fix login bug — closes #5"'], distractors: ['git commit -m "Fix login bug #5"', 'git close #5'], xp: 25 },
+  ],
+};
+
+const azureExplorer: TrackExplorer = {
+  trackId: 'azure',
+  trackName: 'Azure',
+  icon: '☁️',
+  color: '#0078D4',
+  categories: ['All', 'Core', 'Compute', 'Storage', 'DevOps', 'Security'],
+  tags: [
+    { tag: 'az group create', label: 'Resource Group', category: 'Core', description: 'Creates a container for related Azure resources. Best practice: one group per project or environment.', example: 'az group create \\\n  --name myapp-prod \\\n  --location uksouth' },
+    { tag: 'az account show', label: 'Account Info', category: 'Core', description: 'Shows your current Azure subscription and login details. Use to verify you are authenticated.', example: 'az account show\naz account list' },
+    { tag: 'az webapp create', label: 'Web App', category: 'Compute', description: 'Creates an App Service web app for hosting websites, APIs, or backends. Needs a plan first.', example: 'az webapp create \\\n  --name myapp \\\n  --plan myplan \\\n  --resource-group myapp-prod \\\n  --runtime "NODE:20-lts"' },
+    { tag: 'Azure Functions', label: 'Functions', category: 'Compute', description: 'Serverless compute — run code in response to events without managing servers. Pay per execution.', example: 'module.exports = async function (context, req) {\n  context.res = { body: "Hello!" };\n};' },
+    { tag: 'az storage blob upload', label: 'Blob Upload', category: 'Storage', description: 'Uploads a file to Azure Blob Storage. Files are stored in containers inside a storage account.', example: 'az storage blob upload \\\n  --account-name mystorageacct \\\n  --container-name images \\\n  --file photo.jpg' },
+    { tag: 'azure-pipelines.yml', label: 'Pipeline YAML', category: 'DevOps', description: 'Defines an Azure DevOps CI/CD pipeline. Triggers, pool, and steps are the main sections.', example: 'trigger:\n  - main\npool:\n  vmImage: ubuntu-latest\nsteps:\n  - script: npm test' },
+    { tag: 'AzureWebApp@1', label: 'Deploy Task', category: 'DevOps', description: 'Azure Pipelines built-in task for deploying to App Service. Specify appName and the service connection.', example: '- task: AzureWebApp@1\n  inputs:\n    appName: "my-webapp"' },
+    { tag: 'az role assignment create', label: 'RBAC Role', category: 'Security', description: 'Assigns a role (Owner, Contributor, Reader) to a user or service principal on a resource.', example: 'az role assignment create \\\n  --assignee user@example.com \\\n  --role Contributor \\\n  --resource-group myapp-prod' },
+    { tag: 'az keyvault secret set', label: 'Key Vault Secret', category: 'Security', description: 'Stores a secret (API key, password) in Azure Key Vault. Apps retrieve secrets at runtime.', example: 'az keyvault secret set \\\n  --vault-name mykeyvault \\\n  --name "DbPassword" \\\n  --value "SuperSecret123"' },
+  ],
+  challenges: [
+    { id: 'az-seq-1', goal: 'Create a resource group in uksouth', tokens: ['az group create', '--name myapp-prod', '--location uksouth'], distractors: ['az create group', '--region uksouth'], xp: 30 },
+    { id: 'az-seq-2', goal: 'Create an App Service web app', tokens: ['az webapp create', '--name myapp', '--plan myplan', '--resource-group myapp-prod'], distractors: ['az app create', '--server myplan'], xp: 40 },
+    { id: 'az-seq-3', goal: 'Write a pipeline that triggers on main and runs npm test', tokens: ['trigger:', '  - main', 'pool:', '  vmImage: ubuntu-latest', 'steps:', '  - script: npm test'], distractors: ['on: [push]', 'runs-on: ubuntu-latest'], xp: 45 },
+    { id: 'az-seq-4', goal: 'Store a secret in Key Vault', tokens: ['az keyvault secret set', '--vault-name mykeyvault', '--name "ApiKey"', '--value "abc123"'], distractors: ['az keyvault secret add', '--secret "ApiKey"'], xp: 35 },
+  ],
+};
+
+const awsExplorer: TrackExplorer = {
+  trackId: 'aws',
+  trackName: 'AWS',
+  icon: '🟠',
+  color: '#FF9900',
+  categories: ['All', 'Core', 'Compute', 'Storage', 'Database', 'DevOps', 'Security'],
+  tags: [
+    { tag: 'aws sts get-caller-identity', label: 'Caller Identity', category: 'Core', description: 'Verifies your current AWS credentials and shows your account ID and IAM user/role.', example: 'aws sts get-caller-identity' },
+    { tag: 'aws configure', label: 'Configure CLI', category: 'Core', description: 'Sets up your AWS CLI with access key, secret, region, and output format.', example: 'aws configure\n# Prompts for:\n# AWS Access Key ID\n# AWS Secret Access Key\n# Default region (e.g. eu-west-1)\n# Output format (json)' },
+    { tag: 'aws ec2 run-instances', label: 'Launch EC2', category: 'Compute', description: 'Launches a new virtual machine (EC2 instance). Specify the AMI, instance type, and key pair.', example: 'aws ec2 run-instances \\\n  --image-id ami-0abc123 \\\n  --instance-type t3.micro \\\n  --key-name my-keypair' },
+    { tag: 'AWS Lambda', label: 'Lambda', category: 'Compute', description: 'Serverless compute — runs your handler function in response to triggers. No server management.', example: 'exports.handler = async (event) => {\n  return {\n    statusCode: 200,\n    body: JSON.stringify({ message: "Hello!" })\n  };\n};' },
+    { tag: 'aws s3 cp', label: 'S3 Copy', category: 'Storage', description: 'Uploads or downloads files to/from S3. Use s3:// prefix for the bucket path.', example: 'aws s3 cp photo.jpg s3://my-bucket/photo.jpg\naws s3 cp s3://my-bucket/photo.jpg ./photo.jpg' },
+    { tag: 'aws s3 mb', label: 'S3 Make Bucket', category: 'Storage', description: 'Creates a new S3 bucket. Bucket names must be globally unique across all AWS accounts.', example: 'aws s3 mb s3://my-unique-bucket-name' },
+    { tag: 'aws rds create-db-instance', label: 'RDS Instance', category: 'Database', description: 'Creates a managed relational database. AWS handles backups, patching, and failover.', example: 'aws rds create-db-instance \\\n  --db-instance-identifier mydb \\\n  --engine postgres \\\n  --db-instance-class db.t3.micro' },
+    { tag: 'buildspec.yml', label: 'Buildspec', category: 'DevOps', description: 'Tells AWS CodeBuild how to build your project. Defines install, pre-build, build, and post-build phases.', example: 'version: 0.2\nphases:\n  install:\n    commands:\n      - npm install\n  build:\n    commands:\n      - npm run build' },
+    { tag: 'aws lambda update-function-code', label: 'Deploy Lambda', category: 'DevOps', description: 'Deploys new code to a Lambda function from a zip file. Used in CI/CD pipelines.', example: 'aws lambda update-function-code \\\n  --function-name my-function \\\n  --zip-file fileb://function.zip' },
+    { tag: 'IAM Policy (Allow/Deny)', label: 'IAM Policy', category: 'Security', description: 'JSON document that grants or denies permissions. Effect, Action, and Resource are required fields.', example: '{\n  "Effect": "Allow",\n  "Action": "s3:GetObject",\n  "Resource": "arn:aws:s3:::my-bucket/*"\n}' },
+    { tag: 'aws logs tail', label: 'CloudWatch Logs', category: 'DevOps', description: 'Streams live logs from a CloudWatch log group. Use --follow to keep watching.', example: 'aws logs tail /aws/lambda/my-function --follow' },
+  ],
+  challenges: [
+    { id: 'aws-seq-1', goal: 'Upload a file to an S3 bucket', tokens: ['aws s3 cp', 'logo.png', 's3://my-bucket/logo.png'], distractors: ['aws s3 push', 's3://my-bucket logo.png'], xp: 30 },
+    { id: 'aws-seq-2', goal: 'Verify your AWS credentials', tokens: ['aws sts get-caller-identity'], distractors: ['aws iam whoami', 'aws check credentials'], xp: 20 },
+    { id: 'aws-seq-3', goal: 'Write a Lambda handler that returns Hello World', tokens: ['exports.handler = async (event) => {', 'return {', 'statusCode: 200,', 'body: JSON.stringify({ message: "Hello World" })', '};', '};'], distractors: ['module.exports = function(event) {', 'return "Hello World";'], xp: 45 },
+    { id: 'aws-seq-4', goal: 'Write a buildspec.yml that installs and builds', tokens: ['version: 0.2', 'phases:', '  install:', '    commands:', '      - npm install', '  build:', '    commands:', '      - npm run build'], distractors: ['version: 1.0', 'steps:', '  - run: npm install'], xp: 45 },
+    { id: 'aws-seq-5', goal: 'Deploy new code to a Lambda function', tokens: ['aws lambda update-function-code', '--function-name my-function', '--zip-file fileb://function.zip'], distractors: ['aws lambda deploy', '--zip function.zip'], xp: 35 },
+  ],
+};
+
 export const explorerData: TrackExplorer[] = [
   htmlExplorer,
   cssExplorer,
@@ -209,4 +316,8 @@ export const explorerData: TrackExplorer[] = [
   pythonExplorer,
   javaExplorer,
   delphiExplorer,
+  gitExplorer,
+  githubExplorer,
+  azureExplorer,
+  awsExplorer,
 ];

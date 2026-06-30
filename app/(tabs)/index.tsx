@@ -12,6 +12,7 @@ import { useRouter } from 'expo-router';
 import { useFocusEffect } from 'expo-router';
 import { Colors } from '../../constants/colors';
 import { tracks } from '../../data/lessons';
+import { categories } from '../../data/categories';
 import { loadProgress, UserProgress, defaultProgress } from '../../constants/storage';
 
 export default function LearnScreen() {
@@ -43,50 +44,65 @@ export default function LearnScreen() {
           </View>
         )}
 
-        {/* Tracks */}
-        <Text style={styles.sectionTitle}>Choose Your Track</Text>
-        {tracks.map((track) => {
-          const completed = track.lessons.filter((l) =>
-            progress.completedLessons.includes(l.id)
-          ).length;
-          const pct = Math.round((completed / track.lessons.length) * 100);
-          const nextLesson = track.lessons[Math.min(completed, track.lessons.length - 1)];
+        {/* Categories */}
+        {categories.map((category) => {
+          const categoryTracks = tracks.filter((t) => category.trackIds.includes(t.id));
 
           return (
-            <View key={track.id} style={[styles.trackCard, { borderLeftColor: track.color }]}>
-              <Pressable
-                style={({ pressed }) => [
-                  { opacity: pressed ? 0.8 : 1 },
-                  Platform.OS === 'web' && ({ cursor: 'pointer' } as any),
-                ]}
-                onPress={() =>
-                  router.push({ pathname: '/lesson/[id]', params: { id: nextLesson.id } })
-                }
-              >
-                <View style={styles.trackHeader}>
-                  <Text style={styles.trackIcon}>{track.icon}</Text>
-                  <View style={styles.trackInfo}>
-                    <Text style={styles.trackName}>{track.name}</Text>
-                    <Text style={styles.trackDesc}>{track.description}</Text>
+            <View key={category.id} style={styles.categorySection}>
+              <View style={styles.categoryHeader}>
+                <Text style={styles.categoryIcon}>{category.icon}</Text>
+                <View>
+                  <Text style={styles.categoryName}>{category.name}</Text>
+                  <Text style={styles.categoryDesc}>{category.description}</Text>
+                </View>
+              </View>
+
+              {categoryTracks.map((track) => {
+                const completed = track.lessons.filter((l) =>
+                  progress.completedLessons.includes(l.id)
+                ).length;
+                const pct = Math.round((completed / track.lessons.length) * 100);
+                const nextLesson = track.lessons[Math.min(completed, track.lessons.length - 1)];
+
+                return (
+                  <View key={track.id} style={[styles.trackCard, { borderLeftColor: track.color }]}>
+                    <Pressable
+                      style={({ pressed }) => [
+                        { opacity: pressed ? 0.8 : 1 },
+                        Platform.OS === 'web' && ({ cursor: 'pointer' } as any),
+                      ]}
+                      onPress={() =>
+                        router.push({ pathname: '/lesson/[id]', params: { id: nextLesson.id } })
+                      }
+                    >
+                      <View style={styles.trackHeader}>
+                        <Text style={styles.trackIcon}>{track.icon}</Text>
+                        <View style={styles.trackInfo}>
+                          <Text style={styles.trackName}>{track.name}</Text>
+                          <Text style={styles.trackDesc}>{track.description}</Text>
+                        </View>
+                        <Text style={styles.trackPct}>{pct}%</Text>
+                      </View>
+
+                      <View style={styles.progressBg}>
+                        <View style={[styles.progressFill, { width: `${pct}%` as any, backgroundColor: track.color }]} />
+                      </View>
+
+                      <Text style={styles.trackMeta}>
+                        {completed}/{track.lessons.length} lessons · {track.lessons.reduce((a, l) => a + l.xp, 0)} XP available
+                      </Text>
+                    </Pressable>
+
+                    <Pressable
+                      style={[styles.exploreBtn, { borderColor: track.color }]}
+                      onPress={() => router.push({ pathname: '/explorer/[track]', params: { track: track.id } })}
+                    >
+                      <Text style={[styles.exploreBtnText, { color: track.color }]}>🔍 Explore {track.name}</Text>
+                    </Pressable>
                   </View>
-                  <Text style={styles.trackPct}>{pct}%</Text>
-                </View>
-
-                <View style={styles.progressBg}>
-                  <View style={[styles.progressFill, { width: `${pct}%` as any, backgroundColor: track.color }]} />
-                </View>
-
-                <Text style={styles.trackMeta}>
-                  {completed}/{track.lessons.length} lessons · {track.lessons.reduce((a, l) => a + l.xp, 0)} XP available
-                </Text>
-              </Pressable>
-
-              <Pressable
-                style={[styles.exploreBtn, { borderColor: track.color }]}
-                onPress={() => router.push({ pathname: '/explorer/[track]', params: { track: track.id } })}
-              >
-                <Text style={[styles.exploreBtnText, { color: track.color }]}>🔍 Explore {track.name}</Text>
-              </Pressable>
+                );
+              })}
             </View>
           );
         })}
@@ -105,7 +121,11 @@ const styles = StyleSheet.create({
   streakCard: { flexDirection: 'row', alignItems: 'center', backgroundColor: Colors.surface, borderRadius: 12, padding: 14, marginBottom: 24, gap: 10 },
   streakEmoji: { fontSize: 28 },
   streakText: { color: Colors.text, fontSize: 15, fontWeight: '600' },
-  sectionTitle: { fontSize: 18, fontWeight: 'bold', color: Colors.textMuted, marginBottom: 14, textTransform: 'uppercase', letterSpacing: 1 },
+  categorySection: { marginBottom: 32 },
+  categoryHeader: { flexDirection: 'row', alignItems: 'center', gap: 12, marginBottom: 14, paddingBottom: 10, borderBottomWidth: 1, borderBottomColor: Colors.surface },
+  categoryIcon: { fontSize: 28 },
+  categoryName: { fontSize: 18, fontWeight: 'bold', color: Colors.text },
+  categoryDesc: { fontSize: 12, color: Colors.textMuted, marginTop: 2 },
   trackCard: { backgroundColor: Colors.card, borderRadius: 16, padding: 16, marginBottom: 14, borderLeftWidth: 4 },
   trackHeader: { flexDirection: 'row', alignItems: 'center', marginBottom: 12 },
   trackIcon: { fontSize: 32, marginRight: 12 },
