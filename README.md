@@ -4,7 +4,7 @@
 
 CodeCraft teaches real programming skills through bite-sized lessons, interactive challenges, and an XP-based progression system — making learning to code feel like a game.
 
-🌐 **Live demo:** https://jonboyle82.github.io/CodeCraft/
+🌐 **Live demo:** https://jonboyle-dev.github.io/CodeCraft/
 
 ---
 
@@ -102,7 +102,7 @@ CodeCraft/
 ### Run locally
 
 ```bash
-git clone https://github.com/JonBoyle82/CodeCraft.git
+git clone https://github.com/JonBoyle-Dev/CodeCraft.git
 cd CodeCraft
 npm install --legacy-peer-deps
 npx expo start
